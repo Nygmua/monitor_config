@@ -1,8 +1,8 @@
 #!/bin/bash
 cp /etc/hosts /etc/hosts.backup
-echo "112.29.198.100 Anhui_CMCC" >> /etc/hosts
 echo "223.247.108.251 Anhui_CT" >> /etc/hosts
 echo "112.132.208.41 Anhui_CU" >> /etc/hosts
+echo "112.29.198.100 Anhui_CMCC" >> /etc/hosts
 echo "222.35.73.1 Beijing_CMCC" >> /etc/hosts
 echo "220.181.173.35 Beijing_CT" >> /etc/hosts
 echo "202.108.29.159 Beijing_CU" >> /etc/hosts
