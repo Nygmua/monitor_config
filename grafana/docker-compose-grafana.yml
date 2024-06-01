@@ -1,0 +1,31 @@
+services:
+
+  # 可视化面板Grafana 监听3000端口
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    networks:
+      common:
+    volumes:
+      - grafana:/var/lib/grafana
+      - grafanaData:/etc/grafana
+    # ports:
+    #   - 3000:3000
+    # healthcheck:
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=password
+      - GF_USERS_ALLOW_SIGN_UP=false
+    # command:
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+volumes:
+  grafana:
+  grafanaData:
+
+networks:
+  # 使用公共的Network
+  common:
+    external: true

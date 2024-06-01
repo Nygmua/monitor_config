@@ -1,0 +1,66 @@
+services:
+  # 自动更新容器
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: on-failure:3
+    network_mode: host
+    # networks:
+    #   common:
+    # command:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # ports:
+    # healthcheck:
+    environment:
+      # 启用之后仅自动更新labels为true的容器
+      - WATCHTOWER_LABEL_ENABLE=true
+    # 自动更新标签
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+  # 三网ping exporter 
+  # 监听9605端口
+  fping-exporter:
+    image: xiaoleizhang/fping-exporter:4.2
+    container_name: fping-exporter
+    restart: unless-stopped
+    network_mode: host
+    # networks:
+    #   common:
+    privileged: true
+    # volumes:
+    # host模式不用绑定端口
+    # ports:
+    #   - 9605:9605
+    # healthcheck:
+    command: ["fping-exporter", "--fping=/usr/sbin/fping", "-c", "15", "-p", "15"]
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+
+  # node-exporter
+  # 监听9100端口
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    hostname: 
+    restart: unless-stopped
+    network_mode: host
+    # networks:
+    #   common:
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    # host模式不用绑定端口
+    # ports:
+    #   - 9100:9100
+    # healthcheck:
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"

@@ -1,0 +1,50 @@
+services:
+  # blackbox黑盒监控
+  # 监听9115端口
+  blackbox-exporter:
+    image: quay.io/prometheus/blackbox-exporter:latest
+    container_name: blackbox-exporter
+    restart: unless-stopped
+    network_mode: host
+    # networks:
+    #   common:
+    volumes:
+      - ./blackbox:/config
+    # ports:
+    #   - "9115:9115"
+    # healthcheck:
+    command: ["--config.file=/config/blackbox.yml"]
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+  # node-exporter
+  # 监听9100端口
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    # 指定Docker容器的hostname
+    hostname: xxxxxx
+    restart: unless-stopped
+    network_mode: host
+    # networks:
+    #   common:
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    # host模式不用绑定端口
+    # ports:
+    #   - 9100:9100
+    # healthcheck:
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+# networks:
+#   # 使用公共的Network
+#   common:
+#     external: true

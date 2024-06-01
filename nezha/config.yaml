@@ -1,0 +1,40 @@
+AvgPingCount: 2
+Cover: 0
+DDNS:
+  AccessID: ""
+  AccessSecret: ""
+  Enable: false
+  MaxRetries: 3
+  Provider: webhook
+  WebhookHeaders: ""
+  WebhookMethod: POST
+  WebhookRequestBody: ""
+  WebhookURL: ""
+Debug: false
+DisableSwitchTemplateInFrontend: false
+EnableIPChangeNotification: false
+EnablePlainIPInNotification: false
+GRPCHost: 
+GRPCPort: 5555
+HTTPPort: 80
+IPChangeNotificationTag: default
+IgnoredIPNotification: ""
+IgnoredIPNotificationServerIDs: {}
+Language: zh-CN
+Location: Asia/Shanghai
+MaxTCPPingValue: 1000
+Oauth2:
+  Admin: 
+  ClientID: 
+  ClientSecret: 
+  Endpoint: ""
+  Type: github #可以切换成其他认证方式
+ProxyGRPCPort: 0
+Site:
+  Brand: Dashboard
+  CookieName: nezha-dashboard
+  CustomCode: ""
+  DashboardTheme: default
+  Theme: server-status
+  ViewPassword: ""
+TLS: false

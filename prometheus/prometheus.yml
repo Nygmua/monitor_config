@@ -1,0 +1,72 @@
+# global:
+#   scrape_interval: 15s
+#   evaluation_interval: 15s
+
+# scrape_configs:
+#   # node-exporter添加
+#   - job_name: Sm1rkBoy's VPS
+#     static_configs:
+#       # node-exporter监视的第一个VPS
+#       - targets: ["57.180.xx.xx:9100"] #这里修改成自己的ip
+#         labels:
+#           instance: 57.180.❤.❤
+#       # node-exporter监视的第二个VPS
+#       - targets: ["57.180.xx.xx:9100"] #这里修改成自己的ip
+#         labels:
+#           instance: 57.180.❤.❤
+
+#   # fping-exporter添加第一个监视VPS
+#   # 监控的ip可以自己添加
+#   - job_name: Tencent-2号  #这里设置自己的机器
+#     metrics_path: /probe
+#     static_configs:
+#     # 可以你自己自定义
+#     - targets:      
+#       - "61.190.1.197"     # 安徽电信
+#       - "36.34.22.19"      # 安徽联通
+#       - "112.29.198.100"   # 安徽移动
+#       - "183.36.23.111"    # 北京电信
+#       - "112.90.211.100"   # 北京联通
+#       - "183.240.65.191"   # 北京移动
+#       - "101.227.191.14"   # 上海电信
+#       - "59.81.65.42"      # 上海联通
+#       - "183.194.219.220"  # 上海移动
+#       - "220.181.173.35"   # 广州电信
+#       - "202.108.29.159"   # 广州联通
+#       - "222.35.73.1"      # 广州移动
+#       - "8.8.8.8"
+#     relabel_configs:
+#     - source_labels: [__address__]
+#       target_label: __param_target
+#     - source_labels: [__param_target]
+#       target_label: instance
+#     - target_label: __address__
+#       replacement: 124.221.xx.xx:9605 #这里修改成第一台机器的ip
+
+#   # fping-exporter添加第二个监视VPS
+#   # 监控的ip可以自己添加
+#   - job_name: Tencent-2号   #这里设置自己的机器
+#     metrics_path: /probe
+#     static_configs:
+#     # 可以你自己自定义
+#     - targets:      
+#       - "61.190.1.197"     # 安徽电信
+#       - "36.34.22.19"      # 安徽联通
+#       - "112.29.198.100"   # 安徽移动
+#       - "183.36.23.111"    # 北京电信
+#       - "112.90.211.100"   # 北京联通
+#       - "183.240.65.191"   # 北京移动
+#       - "101.227.191.14"   # 上海电信
+#       - "59.81.65.42"      # 上海联通
+#       - "183.194.219.220"  # 上海移动
+#       - "220.181.173.35"   # 广州电信
+#       - "202.108.29.159"   # 广州联通
+#       - "222.35.73.1"      # 广州移动
+#       - "8.8.8.8"
+#     relabel_configs:
+#     - source_labels: [__address__]
+#       target_label: __param_target
+#     - source_labels: [__param_target]
+#       target_label: instance
+#     - target_label: __address__
+#       replacement: 124.221.xx.xx:9605 #这里修改成第二台机器的ip

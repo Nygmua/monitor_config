@@ -1,0 +1,33 @@
+services:
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: on-failure:3
+    networks:
+      common:
+    # command: 
+    volumes:
+      - nginx:/etc/nginx
+      - html:/usr/share/nginx/html
+    ports:
+      - 80:80
+      - 443:443
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # environment:
+    # 自动更新标签
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+volumes:
+  nginx:
+  html:
+
+networks:
+  # 使用公共的Network
+  common:
+    external: true

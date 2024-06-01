@@ -1,0 +1,76 @@
+services:
+
+  # 自动更新容器
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: on-failure:3
+    network_mode: host
+    # networks:
+    #   common:
+    # command:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # ports:
+    # healthcheck:
+    environment:
+      # 启用之后仅自动更新labels为true的容器
+      - WATCHTOWER_LABEL_ENABLE=true
+    # 自动更新标签
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: on-failure:3
+    networks:
+      common:
+    # command: 
+    volumes:
+      - nginx:/etc/nginx
+      - html:/usr/share/nginx/html
+    ports:
+      - 80:80
+      - 443:443
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # environment:
+    # 自动更新标签
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+
+  dashboard:
+    image: registry.cn-shanghai.aliyuncs.com/naibahq/nezha-dashboard
+    container_name: nezha
+    restart: on-failure:3
+    networks:
+      common:
+    # command: 
+    volumes:
+      - ./nezha:/dashboard/data
+      - staticCustom:/dashboard/resource/static/custom:ro
+      - themeCustom:/dashboard/resource/template/theme-custom:ro
+      - template:/dashboard/resource/template/dashboard-custom:ro
+    # 开放agent通信端口
+    ports:
+      - 5555:5555
+    # healthcheck:
+    # environment:
+    # 自动更新标签
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    
+volumes:
+  nginx:
+  html:
+  staticCustom:
+  themeCustom:
+  template:
+networks:
+  # 使用公共的Network
+  common:
+    external: true
