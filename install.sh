@@ -12,68 +12,68 @@ compose_exporter_file="docker-compose-exporter.yml"
 # 设置docker-compose-nezha.yml文件路径
 compose_nezha_file="docker-compose-nezha.yml"
 
-# 检查Docker是否安装函数
-function checkDockerInstalled() 
-{
-    # 检查Docker是否已安装
-    if ! command -v docker &> /dev/null; then
-      echo "Docker未安装，开始安装Docker..."
-      curl -fsSL https://get.docker.com | bash -s docker
+sshPort=22
 
-      # 检查Docker安装是否成功
-      if [ $? -ne 0 ]; then
-        echo "Docker安装失败，请检查网络连接或URL是否正确。"
-        exit 1
-      fi
-      echo "Docker安装成功。"
-    else
-      echo "Docker已安装，跳过安装步骤。"
+# 检查Docker是否安装函数
+checkDockerInstalled() {
+  # 检查Docker是否已安装
+  if ! command -v docker &>/dev/null; then
+    echo "Docker未安装，开始安装Docker..."
+    curl -fsSL https://get.docker.com | bash -s docker
+
+    # 检查Docker安装是否成功
+    if [ $? -ne 0 ]; then
+      echo "Docker安装失败，请检查网络连接或URL是否正确。"
+      exit 1
     fi
+    echo "Docker安装成功。"
+  else
+    echo "Docker已安装，跳过安装步骤。"
+  fi
 }
 
 # 下载docker-compose.yml(5个全)函数
-function wgetDockerCompose() 
-{
-    # 下载docker-compose.yml文件
-    echo "下载docker-compose.yml文件..."
-    wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/docker-compose.yml -O docker-compose.yml
+wgetDockerCompose() {
+  # 下载docker-compose.yml文件
+  echo "下载docker-compose.yml文件..."
+  wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/docker-compose.yml -O docker-compose.yml
 
-    # 检查下载是否成功
-    if [ $? -ne 0 ]; then
-      echo "下载docker-compose.yml文件失败，请检查网络连接或URL是否正确。"
-      exit 1
-    fi
+  # 检查下载是否成功
+  if [ $? -ne 0 ]; then
+    echo "下载docker-compose.yml文件失败，请检查网络连接或URL是否正确。"
+    exit 1
+  fi
 }
 
 # 替换主机名函数
-function changeHostname() {
-    read -p "请输入主机名: " hostname
-    sed -i "s|hostname: .*|hostname: ${hostname}|" $compose_file
+changeHostname() {
+  read -p "请输入主机名: " hostname
+  sed -i "s|hostname: .*|hostname: ${hostname}|" $compose_file
 }
 
 # 替换Username函数
-function changeUsername() {
-    read -p "请输入Grafana账号: " username
-    # 替换Grafana账号
-    sed -i "s/GF_SECURITY_ADMIN_USER=.*/GF_SECURITY_ADMIN_USER=${username}/" $compose_file
+changeUsername() {
+  read -p "请输入Grafana账号: " username
+  # 替换Grafana账号
+  sed -i "s/GF_SECURITY_ADMIN_USER=.*/GF_SECURITY_ADMIN_USER=${username}/" $compose_file
 }
 
 # 替换Grafana密码
-function changePassowrd() {
-    read -sp "请输入Grafana密码: " password
-    echo
-    # 替换Grafana密码
-    sed -i "s/GF_SECURITY_ADMIN_PASSWORD=.*/GF_SECURITY_ADMIN_PASSWORD=${password}/" $compose_file
+changePassowrd() {
+  read -sp "请输入Grafana密码: " password
+  echo
+  # 替换Grafana密码
+  sed -i "s/GF_SECURITY_ADMIN_PASSWORD=.*/GF_SECURITY_ADMIN_PASSWORD=${password}/" $compose_file
 }
 
 # 输入的域名导出成全局变量
-function globalDomain() {
+globalDomain() {
   read -p "请输入访问域名: " domain
   export domain
 }
 
 # 创建Prometheus配置文件函数
-function touchPrometheusConfig() {
+touchPrometheusConfig() {
   # 创建Prometheus配置文件目录
   mkdir -p prometheus
 
@@ -83,38 +83,37 @@ function touchPrometheusConfig() {
 }
 
 # 检查common网络是否存在
-function checkNetworkInstalled() {
-    # 检查名为common的网络是否存在
-    network_exists=$(docker network ls --filter name=^common$ --format "{{.Name}}")
+checkNetworkInstalled() {
+  # 检查名为common的网络是否存在
+  network_exists=$(docker network ls --filter name=^common$ --format "{{.Name}}")
 
-    if [ -z "$network_exists" ]; then
-      echo "创建名为common的Docker网络..."
-      docker network create common
+  if [ -z "$network_exists" ]; then
+    echo "创建名为common的Docker网络..."
+    docker network create common
 
-      # 检查网络创建是否成功
-      if [ $? -ne 0 ]; then
-        echo "创建Docker网络失败。"
-        exit 1
-      fi
-
-      echo "Docker网络common已创建。"
-    else
-      echo "Docker网络common已存在，不需要创建。"
+    # 检查网络创建是否成功
+    if [ $? -ne 0 ]; then
+      echo "创建Docker网络失败。"
+      exit 1
     fi
+
+    echo "Docker网络common已创建。"
+  else
+    echo "Docker网络common已存在，不需要创建。"
+  fi
 }
 
 # 下载nginx的grafana反代文件函数
-function wgetProxyGrafanaConfig() 
-{
-    # 下载nginx的grafana反代文件
-    echo "下载nginx的grafana反代文件..."
-    wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/nginx/grafana.conf -O grafana.conf
-    mv grafana.conf /var/lib/docker/volumes/root_nginx/_data/conf.d/grafana.conf
-    echo "grafana反代配置文件已成功下载"
+wgetProxyGrafanaConfig() {
+  # 下载nginx的grafana反代文件
+  echo "下载nginx的grafana反代文件..."
+  wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/nginx/grafana.conf -O grafana.conf
+  mv grafana.conf /var/lib/docker/volumes/root_nginx/_data/conf.d/grafana.conf
+  echo "grafana反代配置文件已成功下载"
 }
 
 # nginx配置grafana反代
-function setProxyGrafanaConf() {
+setProxyGrafanaConf() {
   # 配置Nginx
   nginx_conf="/var/lib/docker/volumes/root_nginx/_data/conf.d/default.conf"
 
@@ -125,7 +124,6 @@ function setProxyGrafanaConf() {
 
   echo "创建Grafana Nginx反代配置文件..."
   wgetProxyGrafanaConfig
-
 
   # 确定配置文件路径
   config_file="/var/lib/docker/volumes/root_nginx/_data/conf.d/grafana.conf"
@@ -154,7 +152,7 @@ function setProxyGrafanaConf() {
 }
 
 # 1.开始docker-compose.yml(5合1)安装函数
-function dockerComposeFullInstall() {
+dockerComposeFullInstall() {
   # 检查Docker是否安装
   checkDockerInstalled
   # 下载文件
@@ -190,53 +188,52 @@ function dockerComposeFullInstall() {
 }
 
 # 2.卸载docker-compose.yml(5合1)函数
-function dockerComposeUninstallAll() {
-    echo "正在卸载所有容器..."
-    docker compose down --volumes
-    echo "正在移除Docker网络common..."
-    docker network remove common
-    echo "正在清理Docker系统..."
-    docker system prune -a
-    echo "正在删除docker-compose.yml文件..."
-    rm docker-compose.yml
-    echo "删除prometheus.yml"
-    rm -rf prometheus
-    echo "卸载完成。"
+dockerComposeUninstallAll() {
+  echo "正在卸载所有容器..."
+  docker compose down --volumes
+  echo "正在移除Docker网络common..."
+  docker network remove common
+  echo "正在清理Docker系统..."
+  docker system prune -a
+  echo "正在删除docker-compose.yml文件..."
+  rm docker-compose.yml
+  echo "删除prometheus.yml"
+  rm -rf prometheus
+  echo "卸载完成。"
 }
 
 # 下载docker-compose-exporter.yml函数
-function wgetDockerComposeExporter() 
-{
-    # 下载docker-compose-exporter.yml文件
-    echo "下载docker-compose-exporter.yml文件..."
-    wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/docker-compose-exporter.yml -O docker-compose-exporter.yml
+wgetDockerComposeExporter() {
+  # 下载docker-compose-exporter.yml文件
+  echo "下载docker-compose-exporter.yml文件..."
+  wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/docker-compose-exporter.yml -O docker-compose-exporter.yml
 
-    # 检查下载是否成功
-    if [ $? -ne 0 ]; then
-      echo "下载docker-compose-exporter.yml文件失败，请检查网络连接或URL是否正确。"
-      exit 1
-    fi
+  # 检查下载是否成功
+  if [ $? -ne 0 ]; then
+    echo "下载docker-compose-exporter.yml文件失败，请检查网络连接或URL是否正确。"
+    exit 1
+  fi
 }
 
 # 替换exporter主机名函数
-function changeExporterHostname() {
-    read -p "请输入主机名: " hostname
-    sed -i "s|hostname: .*|hostname: ${hostname}|" $compose_exporter_file
+changeExporterHostname() {
+  read -p "请输入主机名: " hostname
+  sed -i "s|hostname: .*|hostname: ${hostname}|" $compose_exporter_file
 }
 
 # 3.启动exporters函数
-function exportersInstall() {
-    checkDockerInstalled
-    wgetDockerComposeExporter
-    changeExporterHostname
-    # 启动fping-exporter和node-exporter服务
-    docker compose -f docker-compose-exporter.yml up -d
+exportersInstall() {
+  checkDockerInstalled
+  wgetDockerComposeExporter
+  changeExporterHostname
+  # 启动fping-exporter和node-exporter服务
+  docker compose -f docker-compose-exporter.yml up -d
 
-    echo "fping-exporter和node-exporter服务已成功启动,并启用自动更新。"
+  echo "fping-exporter和node-exporter服务已成功启动,并启用自动更新。"
 }
 
 # 4.卸载exporters函数
-function dockerComposeUninstallExporter() {
+dockerComposeUninstallExporter() {
   echo "正在卸载Exporter容器..."
   docker compose -f docker-compose-exporter.yml down --volumes
   echo "正在清理Docker系统..."
@@ -247,20 +244,19 @@ function dockerComposeUninstallExporter() {
 }
 
 # 下载docker-compose-nezha.yml函数
-function wgetDockerComposeNezha() 
-{
-    # 下载docker-compose-nezha.yml文件
-    echo "下载docker-compose-nezha.yml文件..."
-    wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/nezha/docker-compose-nezha.yml -O docker-compose-nezha.yml
+wgetDockerComposeNezha() {
+  # 下载docker-compose-nezha.yml文件
+  echo "下载docker-compose-nezha.yml文件..."
+  wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/nezha/docker-compose-nezha.yml -O docker-compose-nezha.yml
 
-    # 检查下载是否成功
-    if [ $? -ne 0 ]; then
-      echo "下载docker-compose-nezha.yml文件失败，请检查网络连接或URL是否正确。"
-      exit 1
-    fi
+  # 检查下载是否成功
+  if [ $? -ne 0 ]; then
+    echo "下载docker-compose-nezha.yml文件失败，请检查网络连接或URL是否正确。"
+    exit 1
+  fi
 }
 
-function setNezhaConfig() {
+setNezhaConfig() {
   mkdir -p nezha
   read -p "面板访问的域名或ip: " domain
   read -p "请输入未被DNS接管的域名或者ip: " nezhaCommDomain
@@ -280,7 +276,7 @@ function setNezhaConfig() {
 }
 
 # 开始docker-compose-nezha.yml安装函数
-function dockerComposeNezhaInstall() {
+dockerComposeNezhaInstall() {
   # 启动服务
   echo "正在启动哪吒探针..."
   docker compose -f docker-compose-nezha.yml up -d
@@ -293,17 +289,16 @@ function dockerComposeNezhaInstall() {
 }
 
 # 下载nginx的nezha反代文件函数
-function wgetProxyNezhaConfig() 
-{
-    # 下载nginx的nezha反代文件
-    echo "下载nginx的nezha反代文件..."
-    wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/nginx/nezha.conf -O nezha.conf
-    mv nezha.conf /var/lib/docker/volumes/root_nginx/_data/conf.d/nezha.conf
-    echo "哪吒反代配置文件已成功下载"
+wgetProxyNezhaConfig() {
+  # 下载nginx的nezha反代文件
+  echo "下载nginx的nezha反代文件..."
+  wget https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/nginx/nezha.conf -O nezha.conf
+  mv nezha.conf /var/lib/docker/volumes/root_nginx/_data/conf.d/nezha.conf
+  echo "哪吒反代配置文件已成功下载"
 }
 
 # nginx配置nezha反代
-function setProxyNezhaConf() {
+setProxyNezhaConf() {
   # 配置Nginx
   nginx_conf="/var/lib/docker/volumes/root_nginx/_data/conf.d/default.conf"
 
@@ -340,7 +335,7 @@ function setProxyNezhaConf() {
 }
 
 # 5.nezha安装函数
-function installNezha() {
+installNezha() {
   checkDockerInstalled
   wgetDockerComposeNezha
   checkNetworkInstalled
@@ -350,22 +345,99 @@ function installNezha() {
 }
 
 # 6.卸载nezha函数
-function uninstallNezha() {
-    echo "正在卸载哪吒面板及相关容器..."
-    docker compose -f docker-compose-nezha.yml down --volumes
-    echo "正在移除Docker网络common..."
-    docker network remove common
-    echo "正在清理Docker系统..."
-    docker system prune -a
-    echo "正在删除docker-compose-nezha.yml文件..."
-    rm docker-compose-nezha.yml
-    echo "删除哪吒配置文件夹"
-    rm -rf nezha
-    echo "卸载完成。"
+uninstallNezha() {
+  echo "正在卸载哪吒面板及相关容器..."
+  docker compose -f docker-compose-nezha.yml down --volumes
+  echo "正在移除Docker网络common..."
+  docker network remove common
+  echo "正在清理Docker系统..."
+  docker system prune -a
+  echo "正在删除docker-compose-nezha.yml文件..."
+  rm docker-compose-nezha.yml
+  echo "删除哪吒配置文件夹"
+  rm -rf nezha
+  echo "卸载完成。"
+}
+
+# 输入公钥
+recordPublicKey() {
+  read -p "请输入您的公钥: " publicKey
+
+  if [ -z "$publicKey" ]; then
+    echo "没有输入公钥, 退出~"
+    return 1
+  fi
+  export publicKey
+}
+
+# 输入ssh端口
+recordSshPort() {
+  read -p "请输入要修改的ssh端口(按回车使用默认22端口): " inputSshPort
+
+  if [ -n "$inputSshPort" ]; then
+    sshPort=$inputSshPort
+  fi
+  export sshPort
+}
+
+# 添加公钥到authorizedKeysFile并修改ssh
+setSSHconfig() {
+  recordPublicKey
+  if [ $? -ne 0 ]; then
+    echo "公钥输入错误，退出"
+    return 1
+  fi
+
+  recordSshPort
+
+  authorizedKeysFile="$HOME/.ssh/authorized_keys"
+  sshdConfigFile="/etc/ssh/sshd_config"
+
+  # 确保 .ssh 目录存在
+  mkdir -p "$HOME/.ssh"
+  chmod 700 "$HOME/.ssh"
+
+  # 将公钥添加到 authorized_keys
+  if ! grep -qF "$publicKey" "$authorizedKeysFile"; then
+    echo "$publicKey" >>"$authorizedKeysFile"
+    chmod 600 "$authorizedKeysFile"
+    echo "公钥已添加到 $authorizedKeysFile"
+  else
+    echo "公钥已经存在于 $authorizedKeysFile"
+  fi
+
+  # 修改sshd_config
+  updateSshdConfig() {
+    local param="$1"
+    local value="$2"
+
+    if grep -q "^#\?\s*$param" "$sshdConfigFile"; then
+      sudo sed -i "s|^#\?\s*$param.*|$param $value|" "$sshdConfigFile"
+    else
+      echo "$param $value" | sudo tee -a "$sshdConfigFile" >/dev/null
+    fi
+  }
+
+  # 设置 sshd_config 选项
+  updateSshdConfig "Port" "$sshPort"
+  updateSshdConfig "PermitRootLogin" "yes"
+  updateSshdConfig "PasswordAuthentication" "no"
+  updateSshdConfig "PubkeyAuthentication" "yes"
+  updateSshdConfig "ChallengeResponseAuthentication" "no"
+  updateSshdConfig "UsePAM" "yes"
+
+  # 重启 sshd 服务以应用更改
+  if systemctl is-active --quiet sshd; then
+    sudo systemctl restart sshd
+    echo "sshd 服务已重启,端口为:$sshPort"
+  else
+    sudo service sshd restart
+    echo "sshd 服务已重启,端口为:$sshPort"
+  fi
 }
 
 # 主函数
-echo "欢迎使用Sm1rkBoy's Grafana+Prometheus/Nezha Docker一键部署脚本。"
+echo "欢迎使用Sm1rkBoy's 一键脚本。"
 echo "请选择操作："
 echo "  1) 面板+数据库+exporter全部安装"
 echo "  2) 卸载所有容器并删除镜像"
@@ -376,16 +448,24 @@ echo "  ------------------------"
 echo "  5) 安装Nezha面板"
 echo "  6) 卸载Nezha面板"
 echo "  ------------------------"
+echo "  7) 修改SSH设置"
 echo "  0) 退出"
-read -p "请选择操作 [0-6]: " choice
+read -p "请选择操作 [0-7]: " choice
 
 case $choice in
-    1) dockerComposeFullInstall ;;
-    2) dockerComposeUninstallAll ;;
-    3) exportersInstall ;;
-    4) dockerComposeUninstallExporter ;;
-    5) installNezha ;;
-    6) uninstallNezha ;;
-    0) echo "退出。"; exit 0 ;;
-    *) echo "错误"; exit 1 ;; # 在默认情况下添加退出语句
+1) dockerComposeFullInstall ;;
+2) dockerComposeUninstallAll ;;
+3) exportersInstall ;;
+4) dockerComposeUninstallExporter ;;
+5) installNezha ;;
+6) uninstallNezha ;;
+7) setSSHconfig ;;
+0)
+  echo "退出。"
+  exit 0
+  ;;
+*)
+  echo "错误"
+  exit 1
+  ;; # 在默认情况下添加退出语句
 esac
