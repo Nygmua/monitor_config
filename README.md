@@ -5,6 +5,11 @@ bash <(curl -Ls https://raw.githubusercontent.com/Nygmua/monitor_config/main/ins
 ```
 脚本已集成哪吒探针的安装!
 
+# Debian 环境下一键安装exporter
+## Install2
+```
+bash <(curl -Ls https://raw.githubusercontent.com/Nygmua/monitor_config/main/exporter-install.sh)
+```
 # 视频教程
 ## Docker搭建Grafana+Prometheus+Exporters企业级探针监控教程
 [视频教程](https://www.youtube.com/watch?v=9QSw0G4jPqY)
