@@ -1,7 +1,7 @@
 # 探针一键安装脚本[纯Docker]
 ## Install
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/Sm1rkBoy/monitor_config/main/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/Nygmua/monitor_config/main/install.sh)
 ```
 脚本已集成哪吒探针的安装!
 
