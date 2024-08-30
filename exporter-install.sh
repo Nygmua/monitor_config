@@ -27,3 +27,4 @@ systemctl daemon-reload
 systemctl enable fping-exporter.service
 systemctl start fping-exporter.service
 systemctl status fping-exporter.service
+systemctl status prometheus-node-exporter.service
