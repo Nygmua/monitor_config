@@ -5,7 +5,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/Nygmua/monitor_config/main/ins
 ```
 脚本已集成哪吒探针的安装!
 
-# Debian 环境下一键安装exporter
+# Debian 环境下一键安装exporter[无需Docker]
 ## Install2
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/Nygmua/monitor_config/main/exporter-install.sh)
