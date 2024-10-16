@@ -1,6 +1,6 @@
 payload:
   # Emby
-  - DOMAIN-SUFFIX,emby.nexitally.com
+    - DOMAIN-SUFFIX,emby.nexitally.com
     - 'DOMAIN-SUFFIX,emby.nexitally.com
     - 'DOMAIN-SUFFIX,emby.cjpc.cc
     - 'DOMAIN-SUFFIX,emby.flowercloud.yt
