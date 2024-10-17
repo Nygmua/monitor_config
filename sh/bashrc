@@ -1,0 +1,46 @@
+HISTCONTROL=ignoreboth:erasedups
+
+# search history
+if [[ $- =~ i ]]; then
+  # setup functions and key binds
+  bind '"\x1b\x5b\x41":history-search-backward'
+  bind '"\x1b\x5b\x42":history-search-forward'
+fi
+
+alias lsa="ls -lah --color=always"
+lsp() { ls -lah --color=always "$@" | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(" %0o ",k);print}'; }
+killport() {
+  lsof -i :$1 | grep LISTEN | awk '{print $2}' | xargs -r kill -9
+}
+
+alias ll='ls -alGh'
+alias la='ls -a'
+alias l='ls -CF'
+alias cls='clear'
+alias gs='git status'
+alias gc='git commit'
+alias gqa='git add .'
+
+# alias dkst="docker stats"
+alias dkst="docker stop"
+alias dkps="docker ps"
+alias dklog="docker logs"
+alias dkpsa="docker ps -a"
+alias dkimgs="docker images"
+alias dkcpup="docker-compose up -d"
+alias dkcpdown="docker-compose down"
+alias dkcpstart="docker-compose start"
+alias dkcpstop="docker-compose stop"
+# 快速返回到父目录
+alias ..='cd ..'
+alias ...='cd ../../'
+
+# 加入颜色输出，在搜索log文件时很有用
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+# lsp() { stat -c '%a %A %U %G %s %n' ${1:-*}; }
+# if [ "$color_prompt" = yes ]; then
+export PS1='\[\e[\033[32m\]\D{%y%m%d}-\A \u@\h:\w\[\e[0m\] \n➜ \[\e[0;1;36m\]\W \[\e[0m\]'
+# echo $PS1
