@@ -15,7 +15,7 @@ cat <<EOF > /etc/systemd/system/fping-exporter.service
 Description=Fping Exporter
 
 [Service]
-ExecStart=/opt/fping/fping-exporter --fping=/usr/bin/fping
+ExecStart=/opt/fping/fping-exporter --fping=/usr/bin/fping -l 0.0.0.0:9605
 Restart=always
 
 [Install]
