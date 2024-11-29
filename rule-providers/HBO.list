@@ -57,4 +57,6 @@ DOMAIN-WILDCARD,hboasia*-i.akamaihd.net
 DOMAIN-SUFFIX,s3-ap-southeast-1.amazonaws.com
 DOMAIN-SUFFIX,max.com
 DOMAIN-SUFFIX,discomax.com
+DOMAIN-SUFFIX,cdn.branch.io
+DOMAIN-SUFFIX,pureapk.com
 PROCESS-NAME,com.hbo.hbonow
