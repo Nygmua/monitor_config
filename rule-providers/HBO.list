@@ -61,14 +61,4 @@ DOMAIN-SUFFIX,onezapp.com
 DOMAIN-SUFFIX,cdn.branch.io
 DOMAIN-SUFFIX,braze.com
 DOMAIN-SUFFIX,onetrust.io
-DOMAIN-SUFFIX,max.com
-DOMAIN-SUFFIXmaxgo.com
-DOMAIN-SUFFIX,hbo.com
-DOMAIN-SUFFIX,hbonow.com
-DOMAIN-SUFFIX,hbogo.com
-DOMAIN-SUFFIX,hbomax.com
-DOMAIN-SUFFIX,hbomaxcdn.com
-DOMAIN-SUFFIX,forthethrone.com
-DOMAIN-SUFFIX,cinemax.com
-DOMAIN-SUFFIX,discomax.com
 PROCESS-NAME,com.hbo.hbonow
