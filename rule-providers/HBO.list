@@ -61,4 +61,7 @@ DOMAIN-SUFFIX,onezapp.com
 DOMAIN-SUFFIX,cdn.branch.io
 DOMAIN-SUFFIX,braze.com
 DOMAIN-SUFFIX,onetrust.io
+DOMAIN-SUFFIX,brightline.tv
+DOMAIN-SUFFIX,litix.io
+DOMAIN-SUFFIX,branch.io
 PROCESS-NAME,com.hbo.hbonow
