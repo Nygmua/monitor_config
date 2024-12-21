@@ -151,3 +151,4 @@ payload:
   - 'DOMAIN-SUFFIX,stream3.misakaf.org,Emby'
   - 'DOMAIN-SUFFIX,stream4.misakaf.org,Emby'
   - 'DOMAIN-SUFFIX,stream_pilipili.misakaf.org,Emby'
+  - 'DOMAIN-SUFFIX,aca.misakaf.org'
